@@ -1,10 +1,32 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+var stat = false;
+
 router.get('/', function(req, res, next) {
-  stat = true;
-  res.render('index', { title: '스마트 약통 배급기' ,status : stat});
+  stat = false;
+  res.status(200).json("Default");
 });
+
+router.get('/setTrue', function(req, res, next) {
+  stat = true;
+  setTimer();
+  res.status(200).json("Set to " + stat + ", Timer set 3000ms");
+});
+
+router.get('/curStat', function(req, res, next) {
+  res.status(200).json(stat);
+});
+
+async function setTimer(){
+  await sleep(3000);
+  stat = false;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
 module.exports = router;
